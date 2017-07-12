@@ -146,6 +146,7 @@ public class DetailActivity extends AppCompatActivity {
         back.setOnClickListener(listener);
         searcher.setOnClickListener(listener);
         startDate.setOnClickListener(listener);
+        endDate.setOnClickListener(listener);
 
         Thread t = new Thread(new Runnable() { // 반드시 스레드 이용 그래야 반복해서 쓸수 있다고 함
             @Override
