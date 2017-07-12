@@ -1,12 +1,15 @@
 package com.exam.administrator.nccc_trip;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 
 public class DetailActivity extends AppCompatActivity {
     private static final String apiKey = "P6bhFFBWwGkij2sSFyuE1fYOhmljx2J0qqEjWC65a0BMXkdVEYQo44MRq0yZK7Txgqbp9GbSWfexAXQhBEwtLg%3D%3D";
@@ -30,6 +34,7 @@ public class DetailActivity extends AppCompatActivity {
     private String homePage;
     private Bitmap img;
 
+    Toolbar toolbar;
     TextView subject;
     ImageView back;
     ImageView searcher;
@@ -39,7 +44,11 @@ public class DetailActivity extends AppCompatActivity {
     TextView addrTv;
     TextView homeTv;
     ImageView imageView;
+
     DetailOnClickListener listener;
+    TextView startDate;
+    TextView endDate;
+    ImageView addCal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +57,10 @@ public class DetailActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         items = bundle.getParcelable("nccc");
         contentId = items.getContInt();
+
+        toolbar = (Toolbar) findViewById(R.id.etc_toolbar);
+        toolbar.setContentInsetsAbsolute(0,0);
+        setSupportActionBar(toolbar);
 
         subject = (TextView) findViewById(R.id.etc_subject);
         back = (ImageView)findViewById(R.id.etc_back);
@@ -60,11 +73,14 @@ public class DetailActivity extends AppCompatActivity {
         addrTv = (TextView) findViewById(R.id.detail_address);
         homeTv = (TextView) findViewById(R.id.detail_homepage);
         imageView = (ImageView) findViewById(R.id.detail_img);
+        startDate = (TextView)findViewById(R.id.detail_start_date);
+        endDate = (TextView)findViewById(R.id.detail_end_date);
+        addCal = (ImageView)findViewById(R.id.detail_add_calendar);
 
         listener = new DetailOnClickListener() {
             @Override
             public void onClick(View v) {
-                switch(v.getId()){
+                switch(v.getId()) {
                     case R.id.etc_back:
                         DetailActivity.this.finish();
                         break;
@@ -72,11 +88,65 @@ public class DetailActivity extends AppCompatActivity {
                         Intent i = new Intent(DetailActivity.this, SearchActivity.class);
                         startActivity(i);
                         break;
+                    case R.id.detail_start_date:
+                        String str = String.valueOf(endDate.getText());
+                        Calendar c = Calendar.getInstance();
+                        int cyear = c.get(Calendar.YEAR);
+                        int cmonth = c.get(Calendar.MONTH);
+                        int cday = c.get(Calendar.DAY_OF_MONTH);
+                        final String[] data = str.split("/");
+                        DatePickerDialog.OnDateSetListener mDateSetListener =
+                                new DatePickerDialog.OnDateSetListener() {
+                                    // onDateSet method
+                                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                        startDate.setText(String.valueOf(year) + "/" + String.valueOf(monthOfYear+1) + "/" + String.valueOf(dayOfMonth));
+                                        if(Integer.parseInt(data[0]) < Integer.parseInt(String.valueOf(year))){
+                                            data[0]=String.valueOf(year);
+                                        }else if(Integer.parseInt(data[1]) < Integer.parseInt(String.valueOf(monthOfYear+1))){
+                                            data[1] = String.valueOf(monthOfYear+1);
+                                        }else if(Integer.parseInt(data[2]) < Integer.parseInt(String.valueOf(dayOfMonth))){
+                                            data[2] = String.valueOf(dayOfMonth);
+                                        }
+                                        endDate.setText(data[0]+"/"+data[1]+"/"+data[2]);
+                                    }
+                                };
+                        DatePickerDialog alert = new DatePickerDialog(DetailActivity.this, mDateSetListener, cyear, cmonth, cday);
+                        alert.show();
+                        break;
+                    case R.id.detail_end_date:
+                        String str1 = String.valueOf(startDate.getText());
+                        Calendar c1 = Calendar.getInstance();
+                        int cyear1 = c1.get(Calendar.YEAR);
+                        int cmonth1 = c1.get(Calendar.MONTH);
+                        int cday1 = c1.get(Calendar.DAY_OF_MONTH);
+                        final String[] data1 = str1.split("/");
+                        DatePickerDialog.OnDateSetListener mDateSetListener1 =
+                                new DatePickerDialog.OnDateSetListener() {
+                                    // onDateSet method
+                                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                        endDate.setText(String.valueOf(year) + "/" + String.valueOf(monthOfYear+1) + "/" + String.valueOf(dayOfMonth));
+                                        if(Integer.parseInt(data1[0]) > Integer.parseInt(String.valueOf(year))){
+                                            data1[0]=String.valueOf(year);
+                                        }else if(Integer.parseInt(data1[1]) > Integer.parseInt(String.valueOf(monthOfYear+1))){
+                                            data1[1] = String.valueOf(monthOfYear+1);
+                                        }else if(Integer.parseInt(data1[2]) > Integer.parseInt(String.valueOf(dayOfMonth))){
+                                            data1[2] = String.valueOf(dayOfMonth);
+                                        }
+                                        startDate.setText(data1[0]+"/"+data1[1]+"/"+data1[2]);
+                                    }
+                                };
+                        DatePickerDialog alert1 = new DatePickerDialog(DetailActivity.this, mDateSetListener1, cyear1, cmonth1, cday1);
+                        alert1.show();
+                        break;
+                    case R.id.detail_add_calendar:
+                        break;
                 }
             }
         };
         back.setOnClickListener(listener);
         searcher.setOnClickListener(listener);
+        startDate.setOnClickListener(listener);
+        endDate.setOnClickListener(listener);
 
         Thread t = new Thread(new Runnable() { // 반드시 스레드 이용 그래야 반복해서 쓸수 있다고 함
             @Override
