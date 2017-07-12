@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by Administrator on 2017-07-08.
  */
 
-public class TourAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TourAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private Context context;
     private ArrayList<TourItem> mItems;
     private int lastPosition = -1;
@@ -30,8 +30,8 @@ public class TourAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         // Note that unlike in ListView adapters, types don't have to be contiguous
         return position;
     }
-    // 필수로 Generate 되어야 하는 메소드 1 : 새로운 뷰 생성
 
+    // 필수로 Generate 되어야 하는 메소드 1 : 새로운 뷰 생성
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { // 새로운 뷰를 만든다
         View v;
@@ -50,18 +50,26 @@ public class TourAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // 필수로 Generate 되어야 하는 메소드 2 : ListView의 getView 부분을 담당하는 메소드
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if(mItems.get(position).getImg() == null){
+
+        }
         if(position == 0) {
             ((BestViewHolder)holder).textView.setText(mItems.get(position).getName());
-            if(mItems.get(position).getImg() != null)
             ((BestViewHolder)holder).imageView.setImageBitmap(mItems.get(position).getImg());
-        }else {
+        }else if(position == 1){
             ((TourViewHolder)holder).name.setText(mItems.get(position).getName());
             ((TourViewHolder)holder).address.setText(mItems.get(position).getAddress());
-            ((TourViewHolder)holder).distance.setText(mItems.get(position).getDistance());
-            if(mItems.get(position).getImg() != null){
-                ((TourViewHolder)holder).image.setImageBitmap(mItems.get(position).getImg());
-            }
-            ((TourViewHolder)holder).medal.setImageResource(mItems.get(position).getMedal());
+            ((TourViewHolder)holder).image.setImageBitmap(mItems.get(position).getImg());
+            ((TourViewHolder)holder).medal.setImageResource(R.drawable.first_medal);
+        }else if(position == 2){
+            ((TourViewHolder)holder).name.setText(mItems.get(position).getName());
+            ((TourViewHolder)holder).address.setText(mItems.get(position).getAddress());
+            ((TourViewHolder)holder).image.setImageBitmap(mItems.get(position).getImg());
+            ((TourViewHolder)holder).medal.setImageResource(R.drawable.second_medal);
+        }else{
+            ((TourViewHolder)holder).name.setText(mItems.get(position).getName());
+            ((TourViewHolder)holder).address.setText(mItems.get(position).getAddress());
+            ((TourViewHolder)holder).image.setImageBitmap(mItems.get(position).getImg());
         }
     }
 
@@ -69,6 +77,10 @@ public class TourAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    public TourItem getItems(int position){
+        return mItems.get(position);
     }
 
     public final static class BestViewHolder extends RecyclerView.ViewHolder {

@@ -1,50 +1,91 @@
 package com.exam.administrator.nccc_trip;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 
 /**
  * Created by Administrator on 2017-07-09.
  */
 
-public class TourItem {
+public class TourItem implements Parcelable {
 
     private String name;
     private String address;
-    private String distance;
     private Bitmap img;
-    private int medal;
+    private int contInt;
 
-    public TourItem(String name, String address, String distance, Bitmap img, int medal){
+
+    public TourItem(Parcel src) {
+        readFromParcel(src);
+    }
+
+    public TourItem(String name, String address, Bitmap img, int contInt) {
         this.name = name;
         this.address = address;
-        this.distance = distance;
         this.img = img;
-        this.medal = medal;
+        this.contInt = contInt;
     }
-    public TourItem(String name, String address, String distance, Bitmap img){
-        this.name = name;
-        this.address = address;
-        this.distance = distance;
-        this.img = img;
-        medal = 0;
-    }
-    public TourItem(String name, Bitmap img){
+
+    public TourItem(String name, Bitmap img, int contInt) {
         this.name = name;
         this.img = img;
+        this.contInt = contInt;
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
-    public String getAddress(){
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
         return address;
     }
-    public String getDistance(){
-        return distance;
+
+    public void setAddress(String address) {
+        this.address = address;
     }
-    public Bitmap getImg(){
+
+    public Bitmap getImg() {
         return img;
     }
-    public int getMedal(){
-        return medal;
+
+    public void setImg(Bitmap img) {
+        this.img = img;
     }
+
+    public int getContInt() {
+        return contInt;
+    }
+
+    public void setContInt(int contInt) {
+        this.contInt = contInt;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(contInt);
+    }
+
+    private void readFromParcel(Parcel src) {
+        this.contInt = src.readInt();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public TourItem createFromParcel(Parcel in) {
+            return new TourItem(in);
+        }
+        public TourItem[] newArray(int size) {
+            return new TourItem[size];
+        }
+    };
 }

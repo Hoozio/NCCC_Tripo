@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.exam.administrator.nccc_trip.TouristActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar_etc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                //여기에 일정 추가 버튼 넣어야함
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/detail_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/back" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/detail_bar" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:background="#ffffff"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:orientation="vertical">
+
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:orientation="vertical"
+                            android:paddingLeft="21dp"
+                            android:paddingTop="12dp">
+
+                            <TextView
+                                android:id="@+id/detail_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="여행지 이름"
+                                android:textColor="#797979" />
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="5dp"/>
+
+                            <TextView
+                                android:id="@+id/detail_address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="주소" />
+
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <LinearLayout
+                                        android:id="@+id/first_detail_laytout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/thirdline"
+                                        android:layout_marginTop="10dp"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/detailtxt_short"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:ellipsize="end"
+                                            android:lineSpacingExtra="6dip"
+                                            android:maxLines="2"
+                                            android:text="나 제대하기 얼마전 후회했던 렸어 어어어 몇해지나 결국 너를 봤을 때 마전 후회했던 렸어 어어어 몇해지나 결국 너를 봤을 때 마전 후회했던 렸어 어어어 몇해지나 결국 너를 봤을 때 마전 후회했던 렸어 어어어 몇해지나 결국 너를 봤을 때 마전 후회했던 렸어 어어어 몇해지나 결국 너를 봤을 때 마전 후회했던 렸어 어어어 몇해지나 결국 너를 봤을 때 마전 후회했던 렸어 어어어 몇해지나 결국 너를 봤을 때 마전 후회했던 렸어 어어어 몇해지나 결국 너를 봤을 때 마전 후회했던 렸어 어어어 몇해지나 결국 너를 봤을 때 마전 후회했던 렸어 어어어 몇해지나 결국 너를 봤을 때 너 소ㅑㄴㄷ랸두래냐ㅜ리냐둘소ㅑㄴㄷ랸두래냐ㅜ리냐둘 소ㅑㄴㄷ랸두래냐ㅜ리냐둘소ㅑㄴㄷ랸두래냐ㅜ리냐둘 소ㅑㄴㄷ랸두래냐ㅜ리냐둘소ㅑㄴㄷ랸두래냐ㅜ리냐둘 소ㅑㄴㄷ랸두래냐ㅜ리냐둘소ㅑㄴㄷ랸두래냐ㅜ리냐둘 소ㅑㄴㄷ랸두래냐ㅜ리냐둘소ㅑㄴㄷ랸두래냐ㅜ리냐둘 소ㅑㄴㄷ랸두래냐ㅜ리냐둘소ㅑㄴㄷ랸두래냐ㅜ리냐둘 소ㅑㄴㄷ랸두래냐ㅜ리냐둘 소ㅑㄴㄷ랸두래냐ㅜ리냐둘 ㅍ 소ㅑㄴㄷ랸두래냐ㅜ리냐둘 소ㅑㄴㄷ랸두래냐ㅜ리냐둘 ㅍ 소ㅑㄴㄷ랸두래냐ㅜ리냐둘 ㅍ소ㅑㄴㄷ랸두래냐ㅜ리냐둘 소ㅑㄴㄷ랸두래냐ㅜ리냐둘 소ㅑㄴㄷ랸두래냐ㅜ리냐둘"
+                                            android:textColor="#464646"
+                                            android:textSize="13dp" />
+                                    </LinearLayout>
+
+                                </FrameLayout>
+
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <LinearLayout
+                                        android:id="@+id/second_detail_layout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="10dp"
+                                        android:orientation="vertical"
+                                        android:visibility="gone">
+
+                                        <TextView
+                                            android:id="@+id/detailtxt_long"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:ellipsize="marquee"
+                                            android:lineSpacingExtra="7dip"
+                                            android:textColor="#464646"
+                                            android:textSize="13dp" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="8dp"
+                                            android:id="@+id/detail_homepage"/>
+
+                                    </LinearLayout>
+                                </FrameLayout>
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <ImageView
+                                    android:layout_width="56dp"
+                                    android:layout_height="56dp"
+                                    android:src="@drawable/keyword_little" />
+
+                                <TextView
+                                    android:id="@+id/detail_moretxt"
+                                    android:layout_width="56dp"
+                                    android:layout_height="56dp"
+                                    android:gravity="center"
+                                    android:text="더보기" />
+                            </FrameLayout>
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+                // 지도 넣을 부분
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</FrameLayout>

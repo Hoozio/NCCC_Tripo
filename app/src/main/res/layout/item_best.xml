@@ -4,7 +4,8 @@
     xmlns:card="http://schemas.android.com/apk/res-auto"
     card:cardBackgroundColor="#ffffff"
     android:layout_width="match_parent"
-    android:layout_height="230dp">
+    android:layout_height="230dp"
+    android:id="@+id/card_best">
 
     <ImageView
         android:id="@+id/best_img"
