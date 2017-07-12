@@ -68,7 +68,7 @@ public class DetailActivity extends AppCompatActivity {
                     case R.id.etc_back:
                         DetailActivity.this.finish();
                         break;
-                    case R.id.searcher:
+                    case R.id.etc_searcher:
                         Intent i = new Intent(DetailActivity.this, SearchActivity.class);
                         startActivity(i);
                         break;
