@@ -41,7 +41,7 @@
                         android:id="@+id/detail_start_date"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="1900/01/01"
+                        android:text="2017/1/1"
                         android:gravity="center"/>
                 </FrameLayout>
 
@@ -70,7 +70,7 @@
                         android:id="@+id/detail_end_date"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="2017/07/13"
+                        android:text="2017/7/13"
                         android:gravity="center"/>
                 </FrameLayout>
 
@@ -224,6 +224,7 @@
                             </FrameLayout>
 
                             <FrameLayout
+                                android:id="@+id/detail_more"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
 
@@ -233,7 +234,6 @@
                                     android:src="@drawable/keyword_little" />
 
                                 <TextView
-                                    android:id="@+id/detail_moretxt"
                                     android:layout_width="56dp"
                                     android:layout_height="56dp"
                                     android:gravity="center"

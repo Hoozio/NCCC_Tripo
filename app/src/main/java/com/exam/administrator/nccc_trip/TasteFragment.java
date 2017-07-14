@@ -1,24 +1,14 @@
 package com.exam.administrator.nccc_trip;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.CalendarMode;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-
-import static android.R.attr.radius;
 
 
 public class TasteFragment extends Fragment {
@@ -33,7 +23,6 @@ public class TasteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_taste, container, false);
-
 
         GpsInfo gps = new GpsInfo(getActivity());
         double lat = gps.getLatitude();

@@ -8,9 +8,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -20,7 +24,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DetailActivity extends AppCompatActivity {
     private static final String apiKey = "P6bhFFBWwGkij2sSFyuE1fYOhmljx2J0qqEjWC65a0BMXkdVEYQo44MRq0yZK7Txgqbp9GbSWfexAXQhBEwtLg%3D%3D";
@@ -41,6 +47,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView titleTv;
     TextView detailShortTv;
     TextView detailLongTv;
+    FrameLayout moreTxt;
     TextView addrTv;
     TextView homeTv;
     ImageView imageView;
@@ -70,12 +77,17 @@ public class DetailActivity extends AppCompatActivity {
         titleTv = (TextView) findViewById(R.id.detail_title);
         detailShortTv = (TextView) findViewById(R.id.detailtxt_short);
         detailLongTv = (TextView) findViewById(R.id.detailtxt_long);
+        moreTxt = (FrameLayout)findViewById(R.id.detail_more);
         addrTv = (TextView) findViewById(R.id.detail_address);
         homeTv = (TextView) findViewById(R.id.detail_homepage);
         imageView = (ImageView) findViewById(R.id.detail_img);
+
         startDate = (TextView)findViewById(R.id.detail_start_date);
         endDate = (TextView)findViewById(R.id.detail_end_date);
         addCal = (ImageView)findViewById(R.id.detail_add_calendar);
+
+        startDate.setText(new SimpleDateFormat("yyyy/MM/dd").format(new Date()));
+        endDate.setText(new SimpleDateFormat("yyyy/MM/dd").format(new Date()));
 
         listener = new DetailOnClickListener() {
             @Override
@@ -140,6 +152,13 @@ public class DetailActivity extends AppCompatActivity {
                         break;
                     case R.id.detail_add_calendar:
                         break;
+                    case R.id.detail_more:
+                        LinearLayout l1 = (LinearLayout) findViewById(R.id.first_detail_laytout);
+                        LinearLayout l2 = (LinearLayout) findViewById(R.id.second_detail_layout);
+                        l1.setVisibility(LinearLayout.GONE);
+                        l2.setVisibility(LinearLayout.VISIBLE);
+                        moreTxt.setVisibility(FrameLayout.GONE);
+                        break;
                 }
             }
         };
@@ -147,6 +166,8 @@ public class DetailActivity extends AppCompatActivity {
         searcher.setOnClickListener(listener);
         startDate.setOnClickListener(listener);
         endDate.setOnClickListener(listener);
+        addCal.setOnClickListener(listener);
+        moreTxt.setOnClickListener(listener);
 
         Thread t = new Thread(new Runnable() { // 반드시 스레드 이용 그래야 반복해서 쓸수 있다고 함
             @Override
@@ -178,7 +199,7 @@ public class DetailActivity extends AppCompatActivity {
                                 try{
                                     homePage = json.getString("homepage");
                                 }catch (Exception e){
-                                    homePage = null;
+                                    homePage = "<br>";
                                 }
                                 try {
                                     URL imgurl = new URL(json.getString("firstimage"));
@@ -207,9 +228,10 @@ public class DetailActivity extends AppCompatActivity {
             t.join();
             titleTv.setText(title);
             addrTv.setText(address);
-            detailShortTv.setText(detailInfo);
-            detailLongTv.setText(detailInfo);
-            homeTv.setText(homePage);
+            detailShortTv.setText(Html.fromHtml(detailInfo));
+            detailLongTv.setText(Html.fromHtml(detailInfo));
+            homeTv.setText(Html.fromHtml(homePage));
+            homeTv.setMovementMethod(LinkMovementMethod.getInstance());
             imageView.setImageBitmap(img);
         }catch (Exception e){
 
