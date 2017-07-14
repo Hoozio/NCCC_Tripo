@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
@@ -54,10 +55,13 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public final static class ViewHolder extends RecyclerView.ViewHolder {
         public CheckBox checkBox;
+        public Button deleteButton;
 
         public ViewHolder(View view) {
             super(view);
-            checkBox = (CheckBox) view.findViewById(R.id.material_view);
+            checkBox = (CheckBox) view.findViewById(R.id.material_check);
+            deleteButton = (Button) view.findViewById(R.id.material_bbutton);
+
         }
     }
 }

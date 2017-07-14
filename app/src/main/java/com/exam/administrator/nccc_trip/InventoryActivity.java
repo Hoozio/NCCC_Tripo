@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -21,8 +23,13 @@ public class InventoryActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.Adapter Adapter;
     RecyclerView.LayoutManager layoutManager;
+    EditText editText;
+    Button button;
     CheckBox checkBox;
     ArrayList items;
+    String materialAdd;
+    Button mbutton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,9 @@ public class InventoryActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
+        editText = (EditText) findViewById(R.id.material_edit);
+        button =(Button) findViewById(R.id.material_button);
+        mbutton=(Button) findViewById(R.id.material_bbutton);
 
         items = new ArrayList();
 
@@ -44,7 +54,15 @@ public class InventoryActivity extends AppCompatActivity {
         recyclerView.setAdapter(Adapter);
         recyclerView.setLayoutManager(layoutManager);
 
-        items.add(new MaterialItem("안녕"));
+        button.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                materialAdd = editText.getText().toString();
+                items.add(new MaterialItem(materialAdd));
+            }
+        });
+
+
+
     }
 
 
