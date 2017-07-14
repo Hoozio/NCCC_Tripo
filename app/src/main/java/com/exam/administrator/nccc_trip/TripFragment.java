@@ -31,8 +31,7 @@ package com.exam.administrator.nccc_trip;
 
 public class TripFragment extends Fragment {
     String apiKey = "P6bhFFBWwGkij2sSFyuE1fYOhmljx2J0qqEjWC65a0BMXkdVEYQo44MRq0yZK7Txgqbp9GbSWfexAXQhBEwtLg%3D%3D";
-    String name1= null;
-    String name2 = null;
+
     public TripFragment(){
     }
 
@@ -45,11 +44,7 @@ public class TripFragment extends Fragment {
     String adress;
     String imgUrl;
     Bitmap bmimg;
-    Handler handler;
-    RecyclerView recyclerView2;
-    RecyclerView.Adapter adapter2;
-    RecyclerView.LayoutManager layoutManager2;
-    ArrayList items2;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -65,8 +60,6 @@ public class TripFragment extends Fragment {
 
         adapter = new TourAdapter(items, view.getContext());
         recyclerView.setAdapter(adapter);
-
-
         recyclerView.setLayoutManager(layoutManager);
 
 
@@ -133,7 +126,6 @@ public class TripFragment extends Fragment {
                                     name = json.getString("title");
                                     adress = json.getString("addr1");
                                     items.add(new TourItem(name, adress, "123.4" + "km", null, R.drawable.first_medal));
-
 
                                 }
 
