@@ -25,6 +25,8 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public CourseAdapter(ArrayList items, Context mContext) {
         mItems = items;
         context = mContext;
+
+        
     }
 
     @Override
