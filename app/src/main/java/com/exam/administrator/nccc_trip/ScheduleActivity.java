@@ -1,11 +1,10 @@
 package com.exam.administrator.nccc_trip;
 
-import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -18,7 +17,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
