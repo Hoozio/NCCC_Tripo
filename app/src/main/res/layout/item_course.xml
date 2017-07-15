@@ -19,6 +19,9 @@
                 android:id="@+id/course_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:cropToPadding="true"
+                android:padding="1dp"
                 android:src="@drawable/map"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,6 +49,7 @@
                     android:background="#70000000">
 
                     <TextView
+                        android:id="@+id/course_subject"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
@@ -62,6 +66,7 @@
                     android:background="#70000000">
 
                     <TextView
+                        android:id="@+id/course_info"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="코스의 설명을 적는다."
@@ -73,7 +78,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="2.5"
             android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
@@ -82,10 +87,12 @@
                 android:text="추천 코스"/>
 
             <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/course_detail_inside"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:justifyContent="flex_start"
-                app:flexDirection="row">
+                app:justifyContent="center"
+                app:flexDirection="row"
+                app:flexWrap="nowrap">
 
             </com.google.android.flexbox.FlexboxLayout>
 

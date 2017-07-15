@@ -34,7 +34,9 @@
                         android:id="@+id/menu"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/menu"/>
+                        android:src="@drawable/menu"
+                        android:scaleType="centerCrop"
+                        android:padding="10dp"/>
                 </FrameLayout>
 
                 <FrameLayout

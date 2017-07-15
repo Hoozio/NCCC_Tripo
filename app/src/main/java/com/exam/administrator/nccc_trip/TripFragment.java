@@ -73,7 +73,8 @@ public class TripFragment extends Fragment {
                 View child = rv.findChildViewUnder(e.getX(),e.getY());
                 if(child!=null&&gestureDetector.onTouchEvent(e)){
                     Intent i = new Intent(view.getContext(),DetailActivity.class);
-                    i.putExtra("nccc",items.get(rv.getChildAdapterPosition(child)));
+                    i.putExtra("what",0);
+                    i.putExtra("nccc",items.get(rv.getChildAdapterPosition(child)).getContInt());
                     startActivity(i);
                 }
                 return false;

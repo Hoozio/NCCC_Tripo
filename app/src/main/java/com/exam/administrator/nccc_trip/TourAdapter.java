@@ -79,10 +79,6 @@ public class TourAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         return mItems.size();
     }
 
-    public TourItem getItems(int position){
-        return mItems.get(position);
-    }
-
     public final static class BestViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         public TextView textView;

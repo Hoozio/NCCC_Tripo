@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -60,10 +61,6 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        Bundle bundle = getIntent().getExtras();
-        items = bundle.getParcelable("nccc");
-        contentId = items.getContInt();
 
         toolbar = (Toolbar) findViewById(R.id.etc_toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
@@ -114,8 +111,11 @@ public class DetailActivity extends AppCompatActivity {
                                         startDate.setText(String.valueOf(year) + "/" + String.valueOf(monthOfYear+1) + "/" + String.valueOf(dayOfMonth));
                                         if(Integer.parseInt(data[0]) < Integer.parseInt(String.valueOf(year))){
                                             data[0]=String.valueOf(year);
+                                            data[1] = String.valueOf(monthOfYear+1);
+                                            data[2] = String.valueOf(dayOfMonth);
                                         }else if(Integer.parseInt(data[1]) < Integer.parseInt(String.valueOf(monthOfYear+1))){
                                             data[1] = String.valueOf(monthOfYear+1);
+                                            data[2] = String.valueOf(dayOfMonth);
                                         }else if(Integer.parseInt(data[2]) < Integer.parseInt(String.valueOf(dayOfMonth))){
                                             data[2] = String.valueOf(dayOfMonth);
                                         }
@@ -139,8 +139,11 @@ public class DetailActivity extends AppCompatActivity {
                                         endDate.setText(String.valueOf(year) + "/" + String.valueOf(monthOfYear+1) + "/" + String.valueOf(dayOfMonth));
                                         if(Integer.parseInt(data1[0]) > Integer.parseInt(String.valueOf(year))){
                                             data1[0]=String.valueOf(year);
+                                            data1[1] = String.valueOf(monthOfYear+1);
+                                            data1[2] = String.valueOf(dayOfMonth);
                                         }else if(Integer.parseInt(data1[1]) > Integer.parseInt(String.valueOf(monthOfYear+1))){
                                             data1[1] = String.valueOf(monthOfYear+1);
+                                            data1[2] = String.valueOf(dayOfMonth);
                                         }else if(Integer.parseInt(data1[2]) > Integer.parseInt(String.valueOf(dayOfMonth))){
                                             data1[2] = String.valueOf(dayOfMonth);
                                         }
@@ -168,61 +171,134 @@ public class DetailActivity extends AppCompatActivity {
         endDate.setOnClickListener(listener);
         addCal.setOnClickListener(listener);
         moreTxt.setOnClickListener(listener);
+        Thread t = new Thread();
+        switch (getIntent().getIntExtra("what",0)){
+            case 0:
+                contentId = getIntent().getIntExtra("nccc",0);
+                t = new Thread(new Runnable() { // 반드시 스레드 이용 그래야 반복해서 쓸수 있다고 함
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey="+apiKey+"&contentId="+contentId+"&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y&_type=json");
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setDefaultUseCaches(false);
+                            conn.setDoInput(true);
+                            conn.setDoOutput(false);
+                            conn.setRequestMethod("GET");
 
-        Thread t = new Thread(new Runnable() { // 반드시 스레드 이용 그래야 반복해서 쓸수 있다고 함
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey="+apiKey+"&contentId="+contentId+"&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y&_type=json");
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setDefaultUseCaches(false);
-                    conn.setDoInput(true);
-                    conn.setDoOutput(false);
-                    conn.setRequestMethod("GET");
+                            if (conn != null) {
+                                conn.setConnectTimeout(10000);
+                                conn.setUseCaches(false);
 
-                    if (conn != null) {
-                        conn.setConnectTimeout(10000);
-                        conn.setUseCaches(false);
+                                if (conn.getResponseCode() >= 200 || conn.getResponseCode() < 300 ) { //접속 잘 되었는지 안되었는지 파악
+                                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8")); // InputStreamReader로 가져온다음 Buffer에 넣으면 이상하게 에러가 남, 그냥 바로 넣을것.
+                                    String buf = "";
+                                    buf = br.readLine();
+                                    if (buf == null) {
 
-                        if (conn.getResponseCode() >= 200 || conn.getResponseCode() < 300 ) { //접속 잘 되었는지 안되었는지 파악
-                            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8")); // InputStreamReader로 가져온다음 Buffer에 넣으면 이상하게 에러가 남, 그냥 바로 넣을것.
-                            String buf = "";
-                            buf = br.readLine();
-                            if (buf == null) {
-
-                            }else {
-                                JSONObject result = new JSONObject(buf);
-                                JSONObject json = result.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
-                                title = json.getString("title");
-                                detailInfo = json.getString("overview");
-                                address = json.getString("addr1");
-                                try{
-                                    homePage = json.getString("homepage");
-                                }catch (Exception e){
-                                    homePage = "<br>";
+                                    }else {
+                                        JSONObject result = new JSONObject(buf);
+                                        JSONObject json = result.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
+                                        title = json.getString("title");
+                                        detailInfo = json.getString("overview");
+                                        address = json.getString("addr1");
+                                        try{
+                                            homePage = json.getString("homepage");
+                                        }catch (Exception e){
+                                            homePage = "<br>";
+                                        }
+                                        try {
+                                            URL imgurl = new URL(json.getString("firstimage"));
+                                            HttpURLConnection imgConn = (HttpURLConnection) imgurl.openConnection();
+                                            imgConn.setDoInput(true);
+                                            imgConn.connect();
+                                            InputStream is = imgConn.getInputStream();
+                                            img = BitmapFactory.decodeStream(is);
+                                            imgConn.disconnect();
+                                        }catch (Exception e){
+                                            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.menu);
+                                            img = drawable.getBitmap();
+                                        }
+                                    }
                                 }
-                                try {
-                                    URL imgurl = new URL(json.getString("firstimage"));
-                                    HttpURLConnection imgConn = (HttpURLConnection) imgurl.openConnection();
-                                    imgConn.setDoInput(true);
-                                    imgConn.connect();
-                                    InputStream is = imgConn.getInputStream();
-                                    img = BitmapFactory.decodeStream(is);
-                                    imgConn.disconnect();
-                                }catch (Exception e){
-                                    BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.menu);
-                                    img = drawable.getBitmap();
-                                }
+                                conn.disconnect();
                             }
                         }
-                        conn.disconnect();
+                        catch(Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+                });
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                final int subId = getIntent().getIntExtra("detail",0);
+                contentId = getIntent().getIntExtra("course",0);
+                t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailInfo?ServiceKey="+apiKey+"&contentTypeId=25&contentId="+contentId+"&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&listYN=Y&_type=json");
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setDefaultUseCaches(false);
+                            conn.setDoInput(true);
+                            conn.setDoOutput(false);
+                            conn.setRequestMethod("GET");
+
+                            if (conn != null) {
+                                conn.setConnectTimeout(10000);
+                                conn.setUseCaches(false);
+
+                                if (conn.getResponseCode() >= 200 || conn.getResponseCode() < 300 ) { //접속 잘 되었는지 안되었는지 파악
+                                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8")); // InputStreamReader로 가져온다음 Buffer에 넣으면 이상하게 에러가 남, 그냥 바로 넣을것.
+                                    String buf = "";
+                                    buf = br.readLine();
+                                    if (buf == null) {
+
+                                    }else {
+                                        JSONObject result = new JSONObject(buf);
+                                        JSONArray results = result.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item");
+
+                                        for(int i = 0; i< results.length(); i++) {
+                                            JSONObject json = results.getJSONObject(i);
+                                            if( subId == json.getInt("subcontentid")) {
+                                                title = json.getString("subdetailalt");
+                                                detailInfo = json.getString("subdetailoverview");
+                                                address = "";
+                                                try {
+                                                    homePage = json.getString("homepage");
+                                                } catch (Exception e) {
+                                                    homePage = "<br>";
+                                                }
+                                                try {
+                                                    URL imgurl = new URL(json.getString("subdetailimg"));
+                                                    HttpURLConnection imgConn = (HttpURLConnection) imgurl.openConnection();
+                                                    imgConn.setDoInput(true);
+                                                    imgConn.connect();
+                                                    InputStream is = imgConn.getInputStream();
+                                                    img = BitmapFactory.decodeStream(is);
+                                                    imgConn.disconnect();
+                                                } catch (Exception e) {
+                                                    BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.menu);
+                                                    img = drawable.getBitmap();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                conn.disconnect();
+                            }
+                        }
+                        catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                break;
+        }
         t.start();
         try {
             t.join();
@@ -230,9 +306,9 @@ public class DetailActivity extends AppCompatActivity {
             addrTv.setText(address);
             detailShortTv.setText(Html.fromHtml(detailInfo));
             detailLongTv.setText(Html.fromHtml(detailInfo));
+            imageView.setImageBitmap(img);
             homeTv.setText(Html.fromHtml(homePage));
             homeTv.setMovementMethod(LinkMovementMethod.getInstance());
-            imageView.setImageBitmap(img);
         }catch (Exception e){
 
         }

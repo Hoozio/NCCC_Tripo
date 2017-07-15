@@ -2,19 +2,26 @@ package com.exam.administrator.nccc_trip;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+
 /**
  * Created by Administrator on 2017-07-15.
  */
 
 public class CourseItem {
     Bitmap img;
-    String name;
+    String subject;
     String info;
+    ArrayList<CourseDetail> courseItems;
+    int count;
+    int contInt;
 
-    public CourseItem(Bitmap img, String name, String info) {
+    public CourseItem(Bitmap img, String subject, String info, ArrayList<CourseDetail> courseItems, int count) {
         this.img = img;
-        this.name = name;
+        this.subject = subject;
         this.info = info;
+        this.courseItems = courseItems;
+        this.count = count;
     }
 
     public Bitmap getImg() {
@@ -25,12 +32,12 @@ public class CourseItem {
         this.img = img;
     }
 
-    public String getName() {
-        return name;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getInfo() {
@@ -39,5 +46,29 @@ public class CourseItem {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public ArrayList<CourseDetail> getCourseItems() {
+        return courseItems;
+    }
+
+    public void setCourseItems(ArrayList<CourseDetail> courseItems) {
+        this.courseItems = courseItems;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getContInt() {
+        return contInt;
+    }
+
+    public void setContInt(int contInt) {
+        this.contInt = contInt;
     }
 }
