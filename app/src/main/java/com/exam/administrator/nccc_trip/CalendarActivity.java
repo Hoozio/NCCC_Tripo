@@ -87,6 +87,9 @@ public class CalendarActivity extends AppCompatActivity {
                             i.putExtra("day", weekDay);
 
                             startActivity(i);
+
+
+
                         }
                 });
 
