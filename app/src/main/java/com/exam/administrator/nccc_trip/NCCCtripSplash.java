@@ -121,10 +121,8 @@ public class NCCCtripSplash extends AppCompatActivity {
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setRequestMethod("POST");
                 OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
-                sendMsg = "id=" + strings[0]+ "&age=" + strings[1] + "&group=" +  strings[2] + "&sex=" + strings[3];
 
-                osw.write(sendMsg);
-                osw.flush();
+
 
                 if(conn.getResponseCode() >= 200 || conn.getResponseCode() < 300){
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));

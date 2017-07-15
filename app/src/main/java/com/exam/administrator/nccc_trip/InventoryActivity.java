@@ -1,12 +1,22 @@
 package com.exam.administrator.nccc_trip;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.GestureDetector;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
@@ -17,19 +27,28 @@ public class InventoryActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.Adapter Adapter;
     RecyclerView.LayoutManager layoutManager;
+    EditText editText;
+    Button button;
     CheckBox checkBox;
     ArrayList items;
+    String materialAdd;
+    Button mbutton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
 
+
         mContext = getApplicationContext();
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
+        editText = (EditText) findViewById(R.id.material_edit);
+        button = (Button) findViewById(R.id.material_button);
+        mbutton = (Button) findViewById(R.id.material_bbutton);
 
         items = new ArrayList();
 
@@ -38,9 +57,19 @@ public class InventoryActivity extends AppCompatActivity {
 
         Adapter = new MaterialAdapter(items, mContext);
         recyclerView.setAdapter(Adapter);
+
         recyclerView.setLayoutManager(layoutManager);
 
-        items.add(new MaterialItem("안녕"));
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                materialAdd = editText.getText().toString();
+                items.add(new MaterialItem(materialAdd));
+                getPreferences();
+            }
+        });
+
+
+
     }
 
 

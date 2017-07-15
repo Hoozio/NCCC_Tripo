@@ -11,13 +11,21 @@
         android:layout_height="match_parent">
 
         <CheckBox
-            android:id="@+id/material_view"
+            android:id="@+id/material_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="CheckBox"
             android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/material_bbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="삭제" />
+
     </FrameLayout>
 
 
