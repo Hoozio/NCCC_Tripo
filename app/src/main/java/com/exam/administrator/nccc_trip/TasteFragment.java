@@ -84,8 +84,7 @@ public class TasteFragment extends Fragment {
             }
 
             @Override
-            public void onFail() {
-
+            public void onFail(){
             }
         });
 
