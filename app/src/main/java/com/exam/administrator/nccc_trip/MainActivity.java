@@ -1,5 +1,6 @@
 package com.exam.administrator.nccc_trip;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -161,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, selected).commit();
+
+
             }
 
             @Override
@@ -169,6 +172,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+
+
+
     }
 
 

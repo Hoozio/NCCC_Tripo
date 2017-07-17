@@ -56,7 +56,7 @@ public class CourseFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey="+apiKey+"&contentTypeId=25&areaCode=33&sigunguCode=&cat1=C01&cat2=&cat3=&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=5&pageNo=1&_type=json");
+                    URL url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey="+apiKey+"&contentTypeId=25&areaCode=33&sigunguCode=&cat1=C01&cat2=&cat3=&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=4&pageNo=1&_type=json");
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setDefaultUseCaches(false);
                     conn.setDoInput(true);

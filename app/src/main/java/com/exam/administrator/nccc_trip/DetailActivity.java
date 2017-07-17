@@ -6,16 +6,23 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,7 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity{
     private static final String apiKey = "P6bhFFBWwGkij2sSFyuE1fYOhmljx2J0qqEjWC65a0BMXkdVEYQo44MRq0yZK7Txgqbp9GbSWfexAXQhBEwtLg%3D%3D";
 
     TourItem items;
@@ -40,6 +47,8 @@ public class DetailActivity extends AppCompatActivity {
     private String address;
     private String homePage;
     private Bitmap img;
+    private double mapx;
+    private double mapy;
 
     Toolbar toolbar;
     TextView subject;
@@ -53,6 +62,8 @@ public class DetailActivity extends AppCompatActivity {
     TextView homeTv;
     ImageView imageView;
 
+
+
     DetailOnClickListener listener;
     TextView startDate;
     TextView endDate;
@@ -61,6 +72,14 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        final MapPOIItem marker = new MapPOIItem();
+        final MapView mapView = new MapView(this);
+        mapView.setDaumMapApiKey("a0822a15d67056c8c62651bc3ebb13c2");
+
+        ViewGroup mapViewCotainer = (ViewGroup) findViewById(R.id.map_view);
+        mapViewCotainer.addView(mapView);
+
 
         toolbar = (Toolbar) findViewById(R.id.etc_toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
@@ -202,6 +221,8 @@ public class DetailActivity extends AppCompatActivity {
                                         title = json.getString("title");
                                         detailInfo = json.getString("overview");
                                         address = json.getString("addr1");
+                                        mapx = json.getDouble("mapx");
+                                        mapy = json.getDouble("mapy");
                                         try{
                                             homePage = json.getString("homepage");
                                         }catch (Exception e){
@@ -309,8 +330,35 @@ public class DetailActivity extends AppCompatActivity {
             imageView.setImageBitmap(img);
             homeTv.setText(Html.fromHtml(homePage));
             homeTv.setMovementMethod(LinkMovementMethod.getInstance());
+
+            CountDownTimer mCountDown = new CountDownTimer(4000,1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    //mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading); // 현재위치 찍는것
+
+                    mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(mapy, mapx), 2, true); // 좌표 찍고 그 위치 표시
+                    marker.setItemName(title);
+                    marker.setTag(0);
+                    marker.setMapPoint(MapPoint.mapPointWithGeoCoord(mapy, mapx));
+                }
+                @Override
+                public void onFinish() {
+
+
+
+                    marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+                    marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
+                    mapView.addPOIItem(marker);
+
+
+                }
+            }.start();
+
         }catch (Exception e){
 
         }
+
+
+
     }
 }

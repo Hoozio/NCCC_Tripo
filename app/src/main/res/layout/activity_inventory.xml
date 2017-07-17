@@ -46,19 +46,19 @@
         android:id="@+id/material_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="43dp"
         android:inputType="text"
-        android:text="준비물 추가는 여기" />
+        android:hint="준비물 추가는 여기"
+        android:layout_alignTop="@+id/material_button"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/material_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="26dp"
         android:text="추가"
-        android:layout_alignTop="@+id/material_edit"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="33dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
 
 

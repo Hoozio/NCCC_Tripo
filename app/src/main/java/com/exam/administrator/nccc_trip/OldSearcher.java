@@ -2,6 +2,7 @@ package com.exam.administrator.nccc_trip;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -84,6 +85,9 @@ public class OldSearcher {
 		String url = buildKeywordSearchApiUrlString(query, latitude, longitude, radius, page,sort, apikey);
 		searchTask = new SearchTask();
 		searchTask.execute(url);
+
+
+
     }
 
 	public void searchCategory(Context applicationContext, String categoryCode, double latitude, double longitude, int radius, int page, int sort, String apikey, OnFinishSearchListener onFinishSearchListener) {
@@ -183,4 +187,6 @@ public class OldSearcher {
 			searchTask = null;
 		}
 	}
+
+
 }

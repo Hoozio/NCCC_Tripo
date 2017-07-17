@@ -1,6 +1,7 @@
 package com.exam.administrator.nccc_trip;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -15,11 +16,13 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by user on 2017-07-13.
  */
 
-public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private Context context;
     private ArrayList<MaterialItem> mItems;
@@ -70,6 +73,12 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     mItems.remove(holderPosition);
                     notifyItemRemoved(holderPosition);
                     notifyItemChanged(holderPosition,  mItems.size());
+                    removeAllPreferences();
+                    for(int i = 0; i<mItems.size(); i++) {
+                        savePreferences(mItems.get(i).getCheckTitle(), i);
+                    }
+
+
                 }
             });
 
@@ -95,4 +104,37 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             deleteButton = (Button) view.findViewById(R.id.material_bbutton);
         }
     }
+
+    private String getPreferences(String name, int size){
+        SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
+        return pref.getString(name+size, "");
+    }
+
+    // 값 저장하기
+    private void savePreferences(String name, int size){
+        SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("item"+size, name);
+        editor.commit();
+    }
+
+    // 값(Key Data) 삭제하기
+    private void removePreferences(int size){
+        SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("item"+size);
+        editor.commit();
+    }
+
+    // 값(ALL Data) 삭제하기
+    private void removeAllPreferences(){
+        SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
+        editor.commit();
+    }
+
 }
+
+
+

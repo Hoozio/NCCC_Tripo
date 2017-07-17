@@ -247,13 +247,14 @@
 
             </FrameLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-                // 지도 넣을 부분
+            <RelativeLayout
 
-            </LinearLayout>
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+
+            </RelativeLayout>
 
 
         </LinearLayout>

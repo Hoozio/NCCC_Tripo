@@ -26,7 +26,7 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mItems = items;
         context = mContext;
 
-        
+
     }
 
     @Override

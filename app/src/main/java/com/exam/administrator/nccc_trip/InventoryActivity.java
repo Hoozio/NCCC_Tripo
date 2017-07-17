@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,12 +29,12 @@ public class InventoryActivity extends AppCompatActivity {
     RecyclerView.Adapter Adapter;
     RecyclerView.LayoutManager layoutManager;
     EditText editText;
-    Button button;
+    Button add_button;
     CheckBox checkBox;
-    ArrayList items;
+    ArrayList<MaterialItem> items;
     String materialAdd;
-    Button mbutton;
 
+    private ArrayList<MaterialItem> mItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,8 @@ public class InventoryActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         editText = (EditText) findViewById(R.id.material_edit);
-        button = (Button) findViewById(R.id.material_button);
-        mbutton = (Button) findViewById(R.id.material_bbutton);
+        add_button = (Button) findViewById(R.id.material_button);
+
 
         items = new ArrayList();
 
@@ -60,30 +61,48 @@ public class InventoryActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(layoutManager);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        for(int i = 0; ; i++) {
+            if(getPreferences("item", i).equals("")){
+                break;
+            }
+            String putitem = getPreferences("item", i);
+            Log.e("^^^", putitem);
+            items.add(new MaterialItem(putitem));
+        }
+
+
+        add_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 materialAdd = editText.getText().toString();
+                editText.setText("");
+                savePreferences(materialAdd, items.size());
                 items.add(new MaterialItem(materialAdd));
-                getPreferences();
+                removeAllPreferences();
+                for(int i=0; i<items.size(); i++) {
+                    savePreferences(items.get(i).getCheckTitle(), i);
+                }
+                Adapter.notifyDataSetChanged();
             }
         });
 
 
 
+
+
     }
 
 
 
-    private void getPreferences(){
+    private String getPreferences(String name, int size){
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        pref.getString("hi", "");
+        return pref.getString(name+size, "");
     }
 
     // 값 저장하기
-    private void savePreferences(){
+    private void savePreferences(String name, int size){
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("hi", "인사잘하네");
+        editor.putString("item"+size, name);
         editor.commit();
     }
 
