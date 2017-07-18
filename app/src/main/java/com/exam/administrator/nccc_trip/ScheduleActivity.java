@@ -1,10 +1,16 @@
 package com.exam.administrator.nccc_trip;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -26,6 +32,8 @@ public class ScheduleActivity extends AppCompatActivity {
     int day;
     int toopleLength;
     int searchI = 0;
+
+    ArrayList<TourItem> items;
     String ccyear;
     String ccmonth;
     String ccday;
@@ -34,6 +42,15 @@ public class ScheduleActivity extends AppCompatActivity {
     String name;
     String adress;
     String imgUrl;
+    int contId;
+    Bitmap bmimg;
+
+    Context mcontext;
+
+    RecyclerView recyclerView;
+    RecyclerView.Adapter adapter;
+    RecyclerView.LayoutManager layoutManager;
+
     ArrayList getTTitle = new ArrayList();
 
     String displayUrl = "http://222.116.135.79:8080/nccc_t/displaySchedule.jsp";
@@ -42,6 +59,8 @@ public class ScheduleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.schedule_recycler_view);
+        mcontext = getApplicationContext();
 
         id_client = getDeviceId();
         year = getIntent().getIntExtra("year", 0);
@@ -52,6 +71,16 @@ public class ScheduleActivity extends AppCompatActivity {
         ccyear = String.valueOf(year);
         ccmonth = String.valueOf(month);
         ccday = String.valueOf(day);
+
+
+        recyclerView = (RecyclerView) findViewById(R.id.calendar_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        items = new ArrayList();
+        layoutManager = new LinearLayoutManager(this);
+        adapter = new CalendarAdapter(items, mcontext);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
+
 
 
         final Handler handler = new Handler() {
@@ -127,7 +156,7 @@ public class ScheduleActivity extends AppCompatActivity {
                                     displayTitle = displayJson.getString("title");
 
                                     getTTitle.add(displayTitle);
-
+                                    Log.e("^^^", ""+getTTitle);
                                     searchI = getTTitle.size();
 
                                 }
@@ -162,48 +191,44 @@ public class ScheduleActivity extends AppCompatActivity {
                                                     JSONObject result = new JSONObject(buf1);
                                                     JSONArray results = result.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item"); //가장 큰 테두리부터 갈라갈라 가져오기
                                                     Log.i(TAG, "ii4");
+                                                    Log.e("^^^^^", ""+buf1);
 
                                                     for (int i = 0; i < results.length(); i++) {
                                                         JSONObject json1 = results.getJSONObject(i);
                                                         name = json1.getString("title");
+                                                        Log.e("&&&&", ""+name);
 
-                                                        try {
-                                                            if (getTTitle.get(ii).equals(name)) {
-                                                                Log.i("%%%%%%", "ii6");
-                                                                adress = json1.getString("addr1");
+                                                        if (getTTitle.get(ii).equals(name)) {
+                                                            Log.i("%%%%%%", "ii6"+name);
+                                                            adress = json1.getString("addr1");
+                                                            contId = json1.getInt("contentid");
+                                                            try {
+                                                                Log.i("%%%%%%", "ii7"+name);
                                                                 imgUrl = json1.getString("firstimage");
                                                                 URL imgurl = new URL(imgUrl);
                                                                 HttpURLConnection imgConn = (HttpURLConnection) imgurl.openConnection();
                                                                 imgConn.setDoInput(true);
                                                                 imgConn.connect();
-
                                                                 InputStream is = imgConn.getInputStream();
+                                                                bmimg = BitmapFactory.decodeStream(is);
+                                                                Log.i("%%%%%%", "ii8"+name);
+                                                                items.add(new TourItem(name, adress, bmimg, contId));
                                                                 imgConn.disconnect();
-                                                                Log.e("d33333fd", name);
-                                                                Log.e("33333dfd", adress);
-                                                                break;
+
+                                                            }
+                                                            catch (Exception ee){
+                                                                Log.i("%%%%%%", "ii9"+name);
+                                                                BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.default_img);
+                                                                bmimg = drawable.getBitmap();
+                                                                Log.i("%%%%%%", "ii10"+name);
+                                                                items.add(new TourItem(name, adress, bmimg, contId));
 
                                                             }
 
-
-                                                        } catch (Exception eee) {
-                                                            if (getTTitle.get(ii).equals(name)) {
-                                                                Log.i(TAG, "NO image");
-                                                                Log.i("%%%%%%", "ii6");
-                                                                adress = json1.getString("addr1");
-                                                                Log.e("d33333fd", name);
-                                                                Log.e("33333dfd", adress);
-                                                                break;
-                                                            }
-
-                                                        }
-                                                        //bmimg = BitmapFactory.decodeStream(is);
-                                                        //items.add(new TourItem(name, adress, "123.4" + "km", bmimg, R.drawable.first_medal));
-
-
-                                                        //items.add(new TourItem(name, adress, "123.4" + "km", null, R.drawable.first_medal));
+                                                          }
 
                                                     }
+
 
                                                 }
                                                 br.close();
@@ -211,6 +236,7 @@ public class ScheduleActivity extends AppCompatActivity {
                                             conn.disconnect();
                                         }
                                     }
+
                                 }
                                 catch(Exception e){
                                     Log.e(TAG, "ii7");
@@ -244,19 +270,14 @@ public class ScheduleActivity extends AppCompatActivity {
 
         displayThread.start();
 
-        try{
-            Log.i("****1111***","**111*****");
+        try {
             displayThread.join();
-            Log.i("****222*****","****222****"+getTTitle.size());
-
-
         }
-        catch (Exception exexe){
-            exexe.printStackTrace();
+        catch (Exception e){
+            e.printStackTrace();
         }
 
 
-        setContentView(R.layout.activity_schedule);
     }
 
     public String getDeviceId(){

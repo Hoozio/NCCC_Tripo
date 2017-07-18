@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -36,7 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DetailActivity extends AppCompatActivity{
+public class DetailActivity extends AppCompatActivity {
     private static final String apiKey = "P6bhFFBWwGkij2sSFyuE1fYOhmljx2J0qqEjWC65a0BMXkdVEYQo44MRq0yZK7Txgqbp9GbSWfexAXQhBEwtLg%3D%3D";
 
     TourItem items;
@@ -63,7 +62,6 @@ public class DetailActivity extends AppCompatActivity{
     ImageView imageView;
 
 
-
     DetailOnClickListener listener;
     TextView startDate;
     TextView endDate;
@@ -79,7 +77,6 @@ public class DetailActivity extends AppCompatActivity{
 
         ViewGroup mapViewCotainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewCotainer.addView(mapView);
-
 
         toolbar = (Toolbar) findViewById(R.id.etc_toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
@@ -193,7 +190,7 @@ public class DetailActivity extends AppCompatActivity{
         Thread t = new Thread();
         switch (getIntent().getIntExtra("what",0)){
             case 0:
-                contentId = getIntent().getIntExtra("nccc",0);
+                contentId = getIntent().getIntExtra("trip",0);
                 t = new Thread(new Runnable() { // 반드시 스레드 이용 그래야 반복해서 쓸수 있다고 함
                     @Override
                     public void run() {
@@ -237,7 +234,7 @@ public class DetailActivity extends AppCompatActivity{
                                             img = BitmapFactory.decodeStream(is);
                                             imgConn.disconnect();
                                         }catch (Exception e){
-                                            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.menu);
+                                            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.default_img);
                                             img = drawable.getBitmap();
                                         }
                                     }
@@ -254,6 +251,61 @@ public class DetailActivity extends AppCompatActivity{
             case 1:
                 break;
             case 2:
+                contentId = getIntent().getIntExtra("hotel",0);
+                t = new Thread(new Runnable() { // 반드시 스레드 이용 그래야 반복해서 쓸수 있다고 함
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey="+apiKey+"&contentTypeId=32&contentId="+contentId+"&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y&_type=json");
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setDefaultUseCaches(false);
+                            conn.setDoInput(true);
+                            conn.setDoOutput(false);
+                            conn.setRequestMethod("GET");
+
+                            if (conn != null) {
+                                conn.setConnectTimeout(10000);
+                                conn.setUseCaches(false);
+
+                                if (conn.getResponseCode() >= 200 || conn.getResponseCode() < 300 ) { //접속 잘 되었는지 안되었는지 파악
+                                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8")); // InputStreamReader로 가져온다음 Buffer에 넣으면 이상하게 에러가 남, 그냥 바로 넣을것.
+                                    String buf = "";
+                                    buf = br.readLine();
+                                    if (buf == null) {
+
+                                    }else {
+                                        JSONObject result = new JSONObject(buf);
+                                        JSONObject json = result.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
+                                        title = json.getString("title");
+                                        detailInfo = json.getString("overview");
+                                        address = json.getString("addr1");
+                                        try{
+                                            homePage = json.getString("homepage");
+                                        }catch (Exception e){
+                                            homePage = "<br>";
+                                        }
+                                        try {
+                                            URL imgurl = new URL(json.getString("firstimage"));
+                                            HttpURLConnection imgConn = (HttpURLConnection) imgurl.openConnection();
+                                            imgConn.setDoInput(true);
+                                            imgConn.connect();
+                                            InputStream is = imgConn.getInputStream();
+                                            img = BitmapFactory.decodeStream(is);
+                                            imgConn.disconnect();
+                                        }catch (Exception e){
+                                            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.default_img);
+                                            img = drawable.getBitmap();
+                                        }
+                                    }
+                                }
+                                conn.disconnect();
+                            }
+                        }
+                        catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 break;
             case 3:
                 final int subId = getIntent().getIntExtra("detail",0);
@@ -286,7 +338,7 @@ public class DetailActivity extends AppCompatActivity{
                                         for(int i = 0; i< results.length(); i++) {
                                             JSONObject json = results.getJSONObject(i);
                                             if( subId == json.getInt("subcontentid")) {
-                                                title = json.getString("subdetailalt");
+                                                title = json.getString("subname");
                                                 detailInfo = json.getString("subdetailoverview");
                                                 address = "";
                                                 try {
@@ -331,7 +383,7 @@ public class DetailActivity extends AppCompatActivity{
             homeTv.setText(Html.fromHtml(homePage));
             homeTv.setMovementMethod(LinkMovementMethod.getInstance());
 
-            CountDownTimer mCountDown = new CountDownTimer(4000,1000) {
+            CountDownTimer mCountDown = new CountDownTimer(5000,1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     //mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading); // 현재위치 찍는것
@@ -353,12 +405,31 @@ public class DetailActivity extends AppCompatActivity{
 
                 }
             }.start();
-
         }catch (Exception e){
 
         }
-
-
-
     }
 }
+
+ /*   CountDownTimer mCountDown = new CountDownTimer(4000,1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+            //mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading); // 현재위치 찍는것
+
+            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(mapy, mapx), 2, true); // 좌표 찍고 그 위치 표시
+            marker.setItemName(title);
+            marker.setTag(0);
+            marker.setMapPoint(MapPoint.mapPointWithGeoCoord(mapy, mapx));
+        }
+        @Override
+        public void onFinish() {
+
+
+
+            marker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+            marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin);
+            mapView.addPOIItem(marker);
+
+
+        }
+    }.start();*/

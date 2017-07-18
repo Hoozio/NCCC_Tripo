@@ -1,9 +1,11 @@
 package com.exam.administrator.nccc_trip;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
@@ -16,6 +18,8 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -52,15 +56,19 @@ public class CalendarActivity extends AppCompatActivity {
     String deleteUrl = "http://222.116.135.79:8080/nccc_t/deleteSchedule.jsp";
     String calendarUrl = "http://222.116.135.79:8080/nccc_t/getSchedule.jsp";
 
+    Context mContext;
 
     MaterialCalendarView tourCalendarView;
+    private CalendarDialog mCalendarDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-
+        mContext = getApplicationContext();
         tourCalendarView = (MaterialCalendarView) findViewById(R.id.calendarView);
+
+
 
 
         OneDayDecorator oneDayDecorator = new OneDayDecorator();
@@ -81,51 +89,63 @@ public class CalendarActivity extends AppCompatActivity {
                 int weekYear = calendar.get(Calendar.YEAR);
                 int weekMonth = calendar.get(Calendar.MONTH) + 1;
                 int weekDay = calendar.get(Calendar.DATE);
+
+
+                mCalendarDialog = new CalendarDialog(CalendarActivity.this, Integer.toString(weekDay), "일정 기록될곳", rightListener);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    mCalendarDialog.create();
+                }
+                mCalendarDialog.setCanceledOnTouchOutside(true);
+
+                mCalendarDialog.show();
+
+//                CalendarActivity
+
                 Log.e("&&&&", ""+weekYear+weekMonth+weekDay);
-                            i.putExtra("year", weekYear);
-                            i.putExtra("month", weekMonth);
-                            i.putExtra("day", weekDay);
+                /*
+                i.putExtra("year", weekYear);
+                i.putExtra("month", weekMonth);
+                i.putExtra("day", weekDay);
 
-                            startActivity(i);
+                startActivity(i);*/
 
+            }
+        });
 
-
-                        }
-                });
-
-                tourCalendarView.addDecorators(
-                        new SundayDecorator(),
-                        new SaturdayDecorator(),
-                        oneDayDecorator);
-
+        tourCalendarView.addDecorators(
+                new SundayDecorator(),
+                new SaturdayDecorator(),
+                oneDayDecorator);
 
 
 
 
-                //final Dbload insertScehdule = new Dbload();
-                final String id_client = getDeviceId();
 
-                final Handler handler = new Handler() {
-                    public void handleMessage(Message msg) {
-                        switch (msg.what) {
-                            case 1:
-                                try {
-                                    String highlightDay = (String) msg.obj;
-                                    //String fdfd1 = insertScehdule.execute(id_client, title, "2017", "07", "13", "06").get();
-                                    Log.e("&&&&", highlightDay);
-                                    String[] arr = highlightDay.split("/");
-                                    int year  = Integer.parseInt(arr[0]);
-                                    int month  = Integer.parseInt(arr[1]);
-                                    int day  = Integer.parseInt(arr[2]);
-                                    int time  = Integer.parseInt(arr[3]);
+        //final Dbload insertScehdule = new Dbload();
+        final String id_client = getDeviceId();
 
-                            tourCalendarView.addDecorator(new tourDecorator(year, month, day));
+        final Handler handler = new Handler() {
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1:
+                        try {
+                            String highlightDay = (String) msg.obj;
+                            //String fdfd1 = insertScehdule.execute(id_client, title, "2017", "07", "13", "06").get();
+                            Log.e("&&&&", highlightDay);
+                            String[] arr = highlightDay.split("/");
+                            int year  = Integer.parseInt(arr[0]);
+                            int month  = Integer.parseInt(arr[1]);
+                            int day  = Integer.parseInt(arr[2]);
+                            int time  = Integer.parseInt(arr[3]);
+
+                    tourCalendarView.addDecorator(new tourDecorator(year, month, day));
 
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        break;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
 
                 }
             }
@@ -205,6 +225,12 @@ public class CalendarActivity extends AppCompatActivity {
 
 
     }
+
+    private View.OnClickListener rightListener = new View.OnClickListener(){
+        public void onClick(View v){
+            mCalendarDialog.dismiss();
+        }
+    };
     public String getDeviceId(){
         String idByANDROID_ID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
@@ -237,7 +263,9 @@ public class CalendarActivity extends AppCompatActivity {
 
         @Override
         public void decorate(DayViewFacade view) {
-            view.addSpan(new ForegroundColorSpan(Color.GREEN));
+            view.addSpan(new StyleSpan(Typeface.BOLD));
+            view.addSpan(new RelativeSizeSpan(1.4f));
+            view.addSpan(new ForegroundColorSpan(Color.RED));
 
         }
     }

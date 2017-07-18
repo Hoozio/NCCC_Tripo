@@ -1,6 +1,5 @@
 package com.exam.administrator.nccc_trip;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,12 +43,13 @@ public class MainActivity extends AppCompatActivity {
     HotelFragment hotelFragment;
     CourseFragment courseFragment;
     public static Context mContext;
+    int sigungu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        sigungu = 0;
         menu = (ImageView) findViewById(R.id.menu);
         searcher = (ImageView) findViewById(R.id.searcher);
         dLayout = (DrawerLayout) findViewById(R.id.drawer);
@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
         calendar.setOnClickListener(naviListener);
         inventory.setOnClickListener(naviListener);
         dairy.setOnClickListener(naviListener);
@@ -146,24 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-
-                Fragment selected = null;
-                if (position == 0) {
-                    selected = regionFragment;
-                } else if (position == 1) {
-                    selected = tripFragment;
-                } else if (position == 2) {
-                    selected = tasteFragment;
-                } else if (position == 3) {
-                    selected = hotelFragment;
-                } else if (position == 4) {
-                    selected = courseFragment;
-                }
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, selected).commit();
-
-
+                shiftFragment(tab.getPosition(), sigungu);
             }
 
             @Override
@@ -172,8 +156,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
-
-
 
     }
 
@@ -225,5 +207,31 @@ public class MainActivity extends AppCompatActivity {
             gpsDialog.create().show();
         }
 
+    }
+    public void shiftFragment(int position, int sigungu){
+        Fragment selected = null;
+        Bundle bundle = new Bundle(1);
+        bundle.putString("sigungu", String.valueOf(sigungu));
+
+        if (position == 0) {
+            selected = regionFragment;
+        } else if (position == 1) {
+            selected = tripFragment;
+            selected.setArguments(bundle);
+        } else if (position == 2) {
+            selected = tasteFragment;
+            selected.setArguments(bundle);
+        } else if (position == 3) {
+            selected = hotelFragment;
+            selected.setArguments(bundle);
+        } else if (position == 4) {
+            selected = courseFragment;
+            selected.setArguments(bundle);
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, selected).commit();
+    }
+
+    public void setSigungu(int sigungu){
+        this.sigungu = sigungu;
     }
 }

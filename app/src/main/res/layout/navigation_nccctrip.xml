@@ -32,6 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:textColor="#ffffff"
                     android:text="나이"/>
             </FrameLayout>
 
@@ -44,6 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:textColor="#ffffff"
                     android:text="성별"/>
             </FrameLayout>
 
@@ -56,6 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:textColor="#ffffff"
                     android:text="인원수"/>
             </FrameLayout>
         </LinearLayout>
@@ -70,7 +73,18 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"></FrameLayout>
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/age_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="20"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:textSize="35dp"
+                    android:textStyle="bold"/>
+            </FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
