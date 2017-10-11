@@ -3,7 +3,6 @@ package com.exam.administrator.nccc_trip;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -60,22 +57,40 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if(holder instanceof DeleteItemVH){
-            DeleteItemVH deleteItemVH = (DeleteItemVH)holder;
+            final DeleteItemVH deleteItemVH = (DeleteItemVH)holder;
 
             deleteItemVH.checkBox.setText(mItems.get(position).getCheckTitle());
             deleteItemVH.deleteButton.setTag(holder);
-
+            deleteItemVH.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    MaterialItem putitem;
+                    for(int i = 0; ; i++) {
+                        if(getPreferences("item",false,i).getCheckTitle().equals("item")){
+                            break;
+                        }
+                        putitem = getPreferences("item", false, i);
+                        mItems.get(i).setCheckPosition(isChecked);
+                        savePreferences(putitem.getCheckTitle(), mItems.get(i).getCheckPosition(), i);
+                    }
+                    removeAllPreferences();
+                    for(int i =0; i<mItems.size(); i++){
+                        savePreferences(mItems.get(i).getCheckTitle(), mItems.get(i).getCheckPosition(), i);
+                    }
+                }
+            });
             deleteItemVH.deleteButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
                     int holderPosition = ((DeleteItemVH)v.getTag()).getAdapterPosition();
                     Log.e("*****", ""+holderPosition);
                     mItems.remove(holderPosition);
+                    removePreferences(holderPosition);
                     notifyItemRemoved(holderPosition);
                     notifyItemChanged(holderPosition,  mItems.size());
                     removeAllPreferences();
                     for(int i = 0; i<mItems.size(); i++) {
-                        savePreferences(mItems.get(i).getCheckTitle(), i);
+                        savePreferences(mItems.get(i).getCheckTitle(), mItems.get(i).getCheckPosition(), i);
                     }
 
 
@@ -105,16 +120,17 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private String getPreferences(String name, int size){
+    private MaterialItem getPreferences(String name, boolean check, int size){
         SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
-        return pref.getString(name+size, "");
+        return new MaterialItem(pref.getString("item"+size, name), pref.getBoolean("check"+size, check));
     }
 
     // 값 저장하기
-    private void savePreferences(String name, int size){
+    private void savePreferences(String name, boolean check, int size){
         SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("item"+size, name);
+        editor.putBoolean("check"+size, check);
         editor.commit();
     }
 
@@ -123,6 +139,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.remove("item"+size);
+        editor.remove("check"+size);
         editor.commit();
     }
 

@@ -1,1 +1,1 @@
-include ':app', ':libDaumMapAndroid', ':json_simple', ':jxl'
+include ':app', ':libDaumMapAndroid', ':json_simple', ':jxl', ':picasso-2.5.2'

@@ -17,6 +17,8 @@ public class CourseDetail extends LinearLayout implements View.OnClickListener{
     CourseDetailData item;
     int contInt;
     int detailInt;
+    double lat;
+    double lon;
 
     public CourseDetail(Context context) {
         super(context);
@@ -64,6 +66,8 @@ public class CourseDetail extends LinearLayout implements View.OnClickListener{
         i.putExtra("what",3);
         i.putExtra("detail",getDetailInt());
         i.putExtra("course",getContInt());
+        i.putExtra("lat", getLat());
+        i.putExtra("lon", getLon());
         this.getContext().startActivity(i);
     }
 
@@ -81,5 +85,21 @@ public class CourseDetail extends LinearLayout implements View.OnClickListener{
 
     public void setDetailInt(int detailInt) {
         this.detailInt = detailInt;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 }

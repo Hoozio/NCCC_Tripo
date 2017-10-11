@@ -5,7 +5,7 @@
     card:cardBackgroundColor="#ffffff"
     android:layout_width="match_parent"
     android:layout_height="180dp"
-    android:id="@+id/card_taste">
+    android:id="@+id/card_festival">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/taste_img"
+                android:id="@+id/festival_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -41,44 +41,30 @@
                     android:weightSum="1">
 
                     <TextView
-                        android:id="@+id/taste_name"
+                        android:id="@+id/festival_name"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="충주호"
                         android:textSize="25sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent"
-                        android:minHeight="20dp"
-                        android:minWidth="20dp"
-                        android:padding="8dp"
-                        android:src="@drawable/location_icon" />
-
-                    <TextView
-                        android:id="@+id/taste_distance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="12.3km"
-                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/taste_address"
+                    android:id="@+id/festival_schedule"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:text="충북 충주시 충렬3길 2"/>
+                    android:text="충북 충주시 충렬3길 2"
+                    android:layout_marginLeft="20dp" />
 
             </LinearLayout>
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/medal"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="#00ffffff"/>
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/festival"/>
     </FrameLayout>
 </android.support.v7.widget.CardView>

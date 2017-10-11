@@ -27,6 +27,7 @@ public class CourseFragment extends Fragment {
 
     public CourseFragment(){
     }
+
     private static final String apiKey = "P6bhFFBWwGkij2sSFyuE1fYOhmljx2J0qqEjWC65a0BMXkdVEYQo44MRq0yZK7Txgqbp9GbSWfexAXQhBEwtLg%3D%3D";
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
@@ -39,7 +40,7 @@ public class CourseFragment extends Fragment {
     Bitmap bmimg;
     String info;
     int count;
-
+    Thread t;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -47,16 +48,16 @@ public class CourseFragment extends Fragment {
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler_course);
         items = new ArrayList();
         courseItems = new ArrayList();
-        layoutManager = new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.HORIZONTAL);
+        layoutManager = new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL);
         adapter = new CourseAdapter(items, view.getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
 
-        Thread t = new Thread(new Runnable() { // 반드시 스레드 이용 그래야 반복해서 쓸수 있다고 함
+        t = new Thread(new Runnable() { // 반드시 스레드 이용 그래야 반복해서 쓸수 있다고 함
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey="+apiKey+"&contentTypeId=25&areaCode=33&sigunguCode=&cat1=C01&cat2=&cat3=&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=4&pageNo=1&_type=json");
+                    URL url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey="+apiKey+"&contentTypeId=25&areaCode=33&sigunguCode=&cat1=C01&cat2=&cat3=&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=B&numOfRows=15&pageNo=1&_type=json");
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setDefaultUseCaches(false);
                     conn.setDoInput(true);
@@ -83,16 +84,14 @@ public class CourseFragment extends Fragment {
                                     name = json.getString("title");
                                     contId = json.getInt("contentid");
                                     try {
+                                        BitmapFactory.Options options = new BitmapFactory.Options();
+                                        options.inSampleSize = 2;
                                         URL imgurl = new URL(json.getString("firstimage"));
-                                        HttpURLConnection imgConn = (HttpURLConnection) imgurl.openConnection();
-                                        imgConn.setDoInput(true);
-                                        imgConn.connect();
-                                        InputStream is = imgConn.getInputStream();
-                                        bmimg = BitmapFactory.decodeStream(is);
+                                        InputStream is = (InputStream)imgurl.getContent();
+                                        bmimg = BitmapFactory.decodeStream(is, null, options);
                                         Log.e("ddd", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@뭐가 문제일까?" + name + "            다른 정보는  " + contId);
-                                        imgConn.disconnect();
                                     } catch (Exception e) {
-                                        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.menu);
+                                        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.default_img);
                                         bmimg = drawable.getBitmap();
                                     }
                                     try {
@@ -133,8 +132,9 @@ public class CourseFragment extends Fragment {
                                                         d.setName(jsonCourse.getString("subname"));
                                                         d.setDetailInt(jsonCourse.getInt("subcontentid"));
                                                         d.setContInt(jsonCourse.getInt("contentid"));
+                                                        d.setLon(jsonInfo.getDouble("mapx"));
+                                                        d.setLat(jsonInfo.getDouble("mapy"));
                                                         courseItems.add(d);
-
                                                     }
                                                     items.add(new CourseItem(bmimg, name, info, courseItems, count));
                                                 }
@@ -143,12 +143,19 @@ public class CourseFragment extends Fragment {
                                                 e.printStackTrace();
                                                 items.add(new CourseItem(bmimg, name, info, courseItems, count));
                                             }
+
                                         }
                                         infoConn.disconnect();
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         info = null;
                                     }
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    });
                                 }
                             }
                         }
@@ -160,11 +167,13 @@ public class CourseFragment extends Fragment {
             }
         });
         t.start();
-        try {
-            t.join();
-        }catch (Exception e){
 
-        }
         return view;
+    }
+
+    @Override
+    public void onPause(){
+        t.interrupt();
+        super.onPause();
     }
 }

@@ -1,6 +1,7 @@
 package com.exam.administrator.nccc_trip;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,7 +12,13 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,8 +37,13 @@ public class ScheduleActivity extends AppCompatActivity {
     int year;
     int month;
     int day;
-    int toopleLength;
     int searchI = 0;
+
+    Toolbar toolbar;
+    TextView subject;
+    ImageView back;
+    ImageView searcher;
+    NavigationOnClickListener listener;
 
     ArrayList<TourItem> items;
     String ccyear;
@@ -44,13 +56,13 @@ public class ScheduleActivity extends AppCompatActivity {
     String imgUrl;
     int contId;
     Bitmap bmimg;
+    boolean isEmpty;
 
     Context mcontext;
-
+    Thread displayThread;
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
-
     ArrayList getTTitle = new ArrayList();
 
     String displayUrl = "http://222.116.135.79:8080/nccc_t/displaySchedule.jsp";
@@ -59,19 +71,47 @@ public class ScheduleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.schedule_recycler_view);
+        setContentView(R.layout.activity_schedule);
+
         mcontext = getApplicationContext();
 
         id_client = getDeviceId();
         year = getIntent().getIntExtra("year", 0);
         month = getIntent().getIntExtra("month", 0);
         day = getIntent().getIntExtra("day", 0);
+        isEmpty = true;
 
+        // Adding Toolbar to the activity
+        toolbar = (Toolbar) findViewById(R.id.etc_toolbar);
+        toolbar.setContentInsetsAbsolute(0,0);
+        setSupportActionBar(toolbar);
+        final TextView tv = (TextView)findViewById(R.id.no_list);
+        subject = (TextView)findViewById(R.id.etc_subject);
+        back = (ImageView)findViewById(R.id.etc_back);
+        searcher = (ImageView)findViewById(R.id.etc_searcher);
+        listener = new NavigationOnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.etc_back:
+                        finish();
+                        break;
+                    case R.id.etc_searcher:
+                        Intent i = new Intent(ScheduleActivity.this, SearchActivity.class);
+                        startActivity(i);
+                        break;
+                }
+            }
+        };
+        subject.setText(String.format("%02d/%02d 스케줄",month, day));
+        back.setOnClickListener(listener);
+        searcher.setOnClickListener(listener);
 
         ccyear = String.valueOf(year);
         ccmonth = String.valueOf(month);
         ccday = String.valueOf(day);
 
+        displayThread = new Thread();
 
         recyclerView = (RecyclerView) findViewById(R.id.calendar_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -80,8 +120,37 @@ public class ScheduleActivity extends AppCompatActivity {
         adapter = new CalendarAdapter(items, mcontext);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+        final GestureDetector gestureDetector = new GestureDetector(ScheduleActivity.this,new GestureDetector.SimpleOnGestureListener()
+        {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e)
+            {
+                return true;
+            }
+        });
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                View child = rv.findChildViewUnder(e.getX(),e.getY());
+                if(child!=null&&gestureDetector.onTouchEvent(e)){
+                    Intent i = new Intent(ScheduleActivity.this,DetailActivity.class);
+                    i.putExtra("what",0);
+                    i.putExtra("tour",items.get(rv.getChildAdapterPosition(child)).getContInt());
+                    startActivity(i);
+                }
+                return false;
+            }
 
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
 
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
 
         final Handler handler = new Handler() {
             public void handleMessage(Message msg) {
@@ -115,9 +184,10 @@ public class ScheduleActivity extends AppCompatActivity {
 
 
 
-        Thread displayThread = new Thread(new Runnable() {
+         displayThread = new Thread(new Runnable() {
             @Override
             public void run() {
+                tv.setVisibility(View.GONE);
                 try {
                     String sendMsg;
                     URL url = new URL(displayUrl);
@@ -161,9 +231,9 @@ public class ScheduleActivity extends AppCompatActivity {
 
                                 }
                                 try {
-                                    for(int ii=0; ii < searchI; ii++) {
+                                    for(int ii = 0; ii < searchI; ii++) {
                                         Log.i(TAG, "ii13");
-                                        url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=" + tourApiKey + "&contentTypeId=12&areaCode=33&sigunguCode=&cat1=&cat2=&cat3=&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=634&pageNo=1&_type=json");
+                                        url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey="+tourApiKey+"&contentTypeId=&areaCode=33&sigunguCode=&cat1=&cat2=&cat3=&listYN=Y&MobileOS=ETC&MobileApp=TourAPI3.0_Guide&arrange=A&numOfRows=1159&pageNo=1&_type=json");
                                         conn = (HttpURLConnection) url.openConnection();
                                         conn.setDefaultUseCaches(false);
                                         conn.setDoInput(true);
@@ -199,34 +269,34 @@ public class ScheduleActivity extends AppCompatActivity {
                                                         Log.e("&&&&", ""+name);
 
                                                         if (getTTitle.get(ii).equals(name)) {
-                                                            Log.i("%%%%%%", "ii6"+name);
+                                                            Log.i("%%%%%%", "ii6" + name);
                                                             adress = json1.getString("addr1");
                                                             contId = json1.getInt("contentid");
+                                                            isEmpty = false;
                                                             try {
-                                                                Log.i("%%%%%%", "ii7"+name);
+                                                                Log.i("%%%%%%", "ii7" + name);
                                                                 imgUrl = json1.getString("firstimage");
                                                                 URL imgurl = new URL(imgUrl);
-                                                                HttpURLConnection imgConn = (HttpURLConnection) imgurl.openConnection();
-                                                                imgConn.setDoInput(true);
-                                                                imgConn.connect();
-                                                                InputStream is = imgConn.getInputStream();
+                                                                InputStream is = (InputStream)imgurl.getContent();
                                                                 bmimg = BitmapFactory.decodeStream(is);
-                                                                Log.i("%%%%%%", "ii8"+name);
+                                                                Log.i("%%%%%%", "ii8" + name);
                                                                 items.add(new TourItem(name, adress, bmimg, contId));
-                                                                imgConn.disconnect();
 
-                                                            }
-                                                            catch (Exception ee){
-                                                                Log.i("%%%%%%", "ii9"+name);
+                                                            } catch (Exception ee) {
+                                                                Log.i("%%%%%%", "ii9" + name);
                                                                 BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.default_img);
                                                                 bmimg = drawable.getBitmap();
-                                                                Log.i("%%%%%%", "ii10"+name);
+                                                                Log.i("%%%%%%", "ii10" + name);
                                                                 items.add(new TourItem(name, adress, bmimg, contId));
 
                                                             }
-
-                                                          }
-
+                                                        }
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                adapter.notifyDataSetChanged();
+                                                            }
+                                                        });
                                                     }
 
 
@@ -243,7 +313,18 @@ public class ScheduleActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                     Log.w(TAG, e.getMessage());
                                 }
-
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(isEmpty){
+                                            Log.e("DDDD","@@@@@@@####################");
+                                            tv.setVisibility(View.VISIBLE);
+                                        }else{
+                                            tv.setVisibility(View.GONE);
+                                        }
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
 
                             } catch (Exception e) {
                                 Log.e("####i6", "dddddddddd");
@@ -266,18 +347,7 @@ public class ScheduleActivity extends AppCompatActivity {
 
             }
         });
-
-
         displayThread.start();
-
-        try {
-            displayThread.join();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-
     }
 
     public String getDeviceId(){
@@ -286,6 +356,9 @@ public class ScheduleActivity extends AppCompatActivity {
         return idByANDROID_ID;
     }
 
-
-
+    @Override
+    public void onPause(){
+        displayThread.interrupt();
+        super.onPause();
+    }
 }

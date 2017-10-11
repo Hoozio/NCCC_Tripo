@@ -9,19 +9,20 @@
         android:id="@+id/custom_image"
         android:layout_width="106dp"
         android:layout_height="105dp"
-        android:background="@drawable/first_medal"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/customtitle"
-        android:layout_width="187dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:layout_marginTop="36dp"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="36dp"
+        android:text="TextView"
+        android:gravity="center"/>
 
 </RelativeLayout>

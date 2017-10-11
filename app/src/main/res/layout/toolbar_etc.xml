@@ -34,7 +34,9 @@
                         android:id="@+id/etc_back"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/back"/>
+                        android:src="@drawable/back"
+                        android:cropToPadding="true"
+                        android:padding="15dp"/>
                 </FrameLayout>
 
                 <FrameLayout
@@ -49,6 +51,7 @@
                         android:text="눈치코칭_충북여행"
                         android:textSize="20sp"
                         android:layout_gravity="center"
+                        android:textColor="#ffffff"
                         android:gravity="center"/>
                 </FrameLayout>
 
@@ -61,7 +64,9 @@
                         android:id="@+id/etc_searcher"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/search"/>
+                        android:src="@drawable/search"
+                        android:cropToPadding="true"
+                        android:padding="5dp"/>
                 </FrameLayout>
             </LinearLayout>
         </android.support.v7.widget.Toolbar>

@@ -11,7 +11,9 @@ public class TourItem{
 
     private String name;
     private String address;
+    private String imgUri;
     private Bitmap img;
+    private double distance;
     private int contInt;
 
     public TourItem(String name, String address, Bitmap img, int contInt) {
@@ -27,6 +29,20 @@ public class TourItem{
         this.contInt = contInt;
     }
 
+    public TourItem(String name, String address, Bitmap img, int contInt, double dis) {
+        this.name = name;
+        this.address = address;
+        this.img = img;
+        this.contInt = contInt;
+        this.distance = dis;
+    }
+    public TourItem(String name, String address, int contInt, double dis, String imgUri) {
+        this.name = name;
+        this.address = address;
+        this.imgUri = imgUri;
+        this.contInt = contInt;
+        this.distance = dis;
+    }
     public String getName() {
         return name;
     }
@@ -59,4 +75,14 @@ public class TourItem{
         this.contInt = contInt;
     }
 
+    public String getDistance(){
+        if(distance == -99.99){
+            return "";
+        }
+        else{
+            return String.format("%.1f km", distance);
+        }
+    }
+
+    public String getImgUri(){return imgUri;}
 }

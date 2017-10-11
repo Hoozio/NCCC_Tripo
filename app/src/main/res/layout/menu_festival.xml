@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:id="@+id/festival_view">
+
+    <ImageView
+        android:id="@+id/festival_icon"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/festival_icon"/>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/festival_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="축제가 없습니다."
+            android:textSize="17sp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:ellipsize="marquee"/>
+    </FrameLayout>
+</LinearLayout>

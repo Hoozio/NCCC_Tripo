@@ -3,7 +3,6 @@ package com.exam.administrator.nccc_trip;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,8 +21,8 @@ public class CalendarDialog extends Dialog {
     private String mTitle;
     private String mContent;
 
-    private View.OnClickListener mRightClickListener;
-
+    private View.OnClickListener ReturnListener;
+    private View.OnClickListener ScheduleListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +36,13 @@ public class CalendarDialog extends Dialog {
         Window window = this.getWindow();
         window.setAttributes(lpWindow);
 
-        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-        window.setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
 
         setContentView(R.layout.calendar_dialog);
 
         mTitleView = (TextView) findViewById(R.id.txt_title);
         mContentView = (TextView) findViewById(R.id.txt_content);
-        mRightButton = (Button) findViewById(R.id.btn_detail);
+        mRightButton = (Button) findViewById(R.id.btn_return);
+        mLeftButton = (Button) findViewById(R.id.btn_detail);
 
         // 제목과 내용을 생성자에서 셋팅한다.
         mTitleView.setText(mTitle);
@@ -52,31 +50,25 @@ public class CalendarDialog extends Dialog {
 
         // 클릭 이벤트 셋팅
 
-        mRightButton.setOnClickListener(mRightClickListener);
+        mRightButton.setOnClickListener(ScheduleListener);
+        mLeftButton.setOnClickListener(ReturnListener);
+
 
     }
 
-    // 클릭버튼이 하나일때 생성자 함수로 클릭이벤트를 받는다.
-    public CalendarDialog(Context context, String title, String Content,
-                        View.OnClickListener singleListener) {
+
+    public CalendarDialog(Context context, String title,
+                        String content, View.OnClickListener leftListener,
+                        View.OnClickListener rightListener) {
         super(context, android.R.style.Theme_Translucent_NoTitleBar);
         this.mTitle = title;
-        this.mContent = Content;
-        this.mRightClickListener = singleListener;
+        this.mContent = content;
+        this.ScheduleListener = leftListener;
+        this.ReturnListener = rightListener;
     }
 
 
 
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-
-        if(event.getAction() == MotionEvent.ACTION_OUTSIDE){
-            this.dismiss();
-        }
-        return false;
-    }
 }
 
 

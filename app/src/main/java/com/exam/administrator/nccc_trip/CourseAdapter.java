@@ -51,13 +51,17 @@ public class CourseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         ((CourseViewHolder)holder).img.setImageBitmap(mItems.get(position).getImg());
         ((CourseViewHolder)holder).subject.setText(mItems.get(position).getSubject());
         ((CourseViewHolder)holder).info.setText(Html.fromHtml(mItems.get(position).getInfo()));
+        ((CourseViewHolder)holder).container.removeAllViewsInLayout();
         for(int i=0; i<mItems.get(position).getCount();i++){
             CourseDetail detail = new CourseDetail(context);
             detail.setNum(mItems.get(position).getCourseItems().get(i).getNum());
             detail.setName(mItems.get(position).getCourseItems().get(i).getName());
+            detail.setDetailInt(mItems.get(position).getCourseItems().get(i).getDetailInt());
+            detail.setContInt(mItems.get(position).getCourseItems().get(i).getContInt());
+            detail.setLon(mItems.get(position).getCourseItems().get(i).getLon());
+            detail.setLat(mItems.get(position).getCourseItems().get(i).getLat());
             detail.refresh();
             ((CourseViewHolder)holder).container.addView(detail);
-
         }
     }
 

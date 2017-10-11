@@ -33,7 +33,9 @@
                         android:id="@+id/backHome"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/back"/>
+                        android:src="@drawable/back"
+                        android:cropToPadding="true"
+                        android:padding="15dp"/>
                 </FrameLayout>
 
                 <FrameLayout
@@ -48,7 +50,9 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:hint="@string/search_hint"
-                        android:textColorHint="#ffffff"/>
+                        android:textColorHint="#ffffff"
+                        android:singleLine="true"
+                        android:lines="1"/>
                 </FrameLayout>
 
                 <FrameLayout
@@ -60,7 +64,9 @@
                         android:id="@+id/realSearch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/search"/>
+                        android:src="@drawable/search"
+                        android:cropToPadding="true"
+                        android:padding="5dp"/>
                 </FrameLayout>
             </LinearLayout>
         </android.support.v7.widget.Toolbar>

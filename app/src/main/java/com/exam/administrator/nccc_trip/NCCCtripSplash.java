@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,25 +27,33 @@ import static android.content.ContentValues.TAG;
 
 public class NCCCtripSplash extends AppCompatActivity {
     public final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 1;
-    public final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 2;
+
     LocationManager locationManager;
+    String id_client;
+    int age_client;
+    int sex_client;
+    int group_client;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nccctrip_splash);
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
 
-        getPermissionGPS();
+        id_client  = getDeviceId();
 
-        try{
+        GetUserInfo getUserInfo = new GetUserInfo();
+        getUserInfo.execute(id_client);
+
+
+
+
+        try {
             getPermissionId();
         }
         catch (Exception e){}
         finally{
-            String myDeviceId = getDeviceId();
+            final String myDeviceId = getDeviceId();
             Log.e(TAG, "iiiiiiiiiiiii        " + myDeviceId);
 
             try {
@@ -50,37 +61,44 @@ public class NCCCtripSplash extends AppCompatActivity {
                 String noob = userCheck.execute(myDeviceId).get();
                 Log.e("df", noob);
                 if(noob.equals("N")) {
-                    Dbload dbload = new Dbload();
-                    String result = dbload.execute(myDeviceId, "20", "2", "1").get();
-                    Log.i(TAG, "iiiiiiiiiiiii  " + result);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent i = new Intent(NCCCtripSplash.this, TutorialActivity.class);
+                            i.putExtra("deviceId", myDeviceId);
+                            startActivity(i);
+                            NCCCtripSplash.this.finish();
+                        }
+                    },4000);
+                } else{
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(NCCCtripSplash.this, MainActivity.class);
+                            intent.putExtra("age_client", age_client);
+                            intent.putExtra("sex_client", sex_client);
+                            intent.putExtra("group_client", group_client);
+                            startActivity(intent);
+                            NCCCtripSplash.this.finish();
+                        }
+                    },4000);
                 }
-                else{}
             }
             catch (Exception e){
                 e.printStackTrace();
             }
         }
 
-
-        this.finish();
     }
 
 
-
-    public void getPermissionGPS(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
-        }
-        else{
-
-        }
-    }
     public void getPermissionId()
     {
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
-
 
         }
         else{
@@ -101,37 +119,46 @@ public class NCCCtripSplash extends AppCompatActivity {
 
                 }
                 break;
-            case MY_PERMISSIONS_ACCESS_FINE_LOCATION:
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-                }
-                break;
             default:
                 break;
 
         }
     }
-    class Dbload extends AsyncTask<String, Void, String> {
+
+
+    class GetUserInfo extends AsyncTask<String, Void, String> {
         String sendMsg, receiveMsg;
         protected String doInBackground(String... strings){
             try{
                 String str;
-                URL url = new URL("http://222.116.135.79:8080/nccc_t/connectDb.jsp");
+                URL url = new URL("http://222.116.135.79:8080/nccc_t/getClientInfo.jsp");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setRequestMethod("POST");
                 OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
+                sendMsg = "id_client=" + strings[0];
 
+                osw.write(sendMsg);
+                osw.flush();
 
-
-                if(conn.getResponseCode() >= 200 || conn.getResponseCode() < 300){
+                if(conn.getResponseCode() >= 200 || conn.getResponseCode() < 300) {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
                     StringBuffer buffer = new StringBuffer();
-                    Log.e("dd", "dddddddddd");
-                    while((str = reader.readLine()) != null ){
+                    Log.e("dd", "yesyesyes");
+                    while ((str = reader.readLine()) != null) {
                         buffer.append(str);
                     }
-                    receiveMsg = buffer.toString();
+                    try {
+                        JSONObject json = new JSONObject(buffer.toString());
+                        age_client = json.getInt("age_client");
+                        sex_client = json.getInt("sex_client");
+                        group_client = json.getInt("group_client");
+
+
+
+                    } catch (Exception exex) {
+
+                    }
                 }
                 else{
                     Log.i("통신 결과", conn.getResponseCode() + "에러");
@@ -144,10 +171,10 @@ public class NCCCtripSplash extends AppCompatActivity {
             catch (IOException e){
                 e.printStackTrace();
             }
-
             return receiveMsg;
         }
     }
+
 
     class UserCheck extends AsyncTask<String, Void, String> {
         String sendMsg, receiveMsg;
@@ -187,6 +214,7 @@ public class NCCCtripSplash extends AppCompatActivity {
             return receiveMsg;
         }
     }
+
 
 
 

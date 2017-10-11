@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 /**
@@ -50,26 +52,26 @@ public class TourAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     // 필수로 Generate 되어야 하는 메소드 2 : ListView의 getView 부분을 담당하는 메소드
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(mItems.get(position).getImg() == null){
-
-        }
         if(position == 0) {
             ((BestViewHolder)holder).textView.setText(mItems.get(position).getName());
-            ((BestViewHolder)holder).imageView.setImageBitmap(mItems.get(position).getImg());
+            Picasso.with(context).load(mItems.get(position).getImgUri()).into(  ((BestViewHolder)holder).imageView);
         }else if(position == 1){
             ((TourViewHolder)holder).name.setText(mItems.get(position).getName());
             ((TourViewHolder)holder).address.setText(mItems.get(position).getAddress());
-            ((TourViewHolder)holder).image.setImageBitmap(mItems.get(position).getImg());
+            Picasso.with(context).load(mItems.get(position).getImgUri()).into( ((TourViewHolder)holder).image);
             ((TourViewHolder)holder).medal.setImageResource(R.drawable.first_medal);
+            ((TourViewHolder)holder).distance.setText(mItems.get(position).getDistance());
         }else if(position == 2){
             ((TourViewHolder)holder).name.setText(mItems.get(position).getName());
             ((TourViewHolder)holder).address.setText(mItems.get(position).getAddress());
-            ((TourViewHolder)holder).image.setImageBitmap(mItems.get(position).getImg());
+            Picasso.with(context).load(mItems.get(position).getImgUri()).into( ((TourViewHolder)holder).image);
             ((TourViewHolder)holder).medal.setImageResource(R.drawable.second_medal);
+            ((TourViewHolder)holder).distance.setText(mItems.get(position).getDistance());
         }else{
             ((TourViewHolder)holder).name.setText(mItems.get(position).getName());
             ((TourViewHolder)holder).address.setText(mItems.get(position).getAddress());
-            ((TourViewHolder)holder).image.setImageBitmap(mItems.get(position).getImg());
+            Picasso.with(context).load(mItems.get(position).getImgUri()).into( ((TourViewHolder)holder).image);
+            ((TourViewHolder)holder).distance.setText(mItems.get(position).getDistance());
         }
     }
 

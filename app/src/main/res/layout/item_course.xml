@@ -22,7 +22,7 @@
                 android:scaleType="centerCrop"
                 android:cropToPadding="true"
                 android:padding="1dp"
-                android:src="@drawable/map"/>
+                android:src="@drawable/default_img"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -33,6 +33,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/gradient_best">
+
 
                     <TextView
                         android:layout_width="match_parent"
@@ -54,8 +55,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="코스 제목"
-                        android:textSize="35sp"
+                        android:textSize="30sp"
                         android:textStyle="bold"
+                        android:lines="2"
                         android:textColor="#ffffff"/>
                 </FrameLayout>
 
@@ -90,9 +92,11 @@
                 android:id="@+id/course_detail_inside"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:justifyContent="center"
+                app:justifyContent="space_around"
+                app:alignItems="center"
                 app:flexDirection="row"
-                app:flexWrap="nowrap">
+                app:flexWrap="nowrap"
+                app:dividerDrawableVertical="@drawable/navi_border">
 
             </com.google.android.flexbox.FlexboxLayout>
 

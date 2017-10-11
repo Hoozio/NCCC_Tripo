@@ -7,38 +7,27 @@
     tools:context="com.exam.administrator.nccc_trip.CalendarActivity">
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <include
+            layout="@layout/toolbar_etc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            app:mcv_selectionColor="@color/colorPrimaryDark"
+            app:mcv_showOtherDates="all"
+            android:padding="20dp"/>
 
-            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/calendarView"
-                android:layout_centerInParent="true"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:mcv_showOtherDates="all"
-                app:mcv_selectionColor="#00F"
-                android:layout_weight="1"/>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
-            </FrameLayout>
-
-        </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 </FrameLayout>

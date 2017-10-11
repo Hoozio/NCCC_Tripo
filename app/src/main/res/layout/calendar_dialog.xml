@@ -9,8 +9,9 @@
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="400dp"
-        android:background="@drawable/shape"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:background="#ffffff">
 
         <TextView
             android:id="@+id/txt_title"
@@ -25,23 +26,51 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="40dip"
+            android:layout_weight="0.03"
             android:gravity="center"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_detail"
-                android:layout_width="50dp"
+                android:id="@+id/btn_return"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:background="@drawable/course_circle"
-                android:text="확인" />
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/shape"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="상세일정"
+                android:textColor="#ffffff"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"></FrameLayout>
+
+            <Button
+                android:id="@+id/btn_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/shape"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="돌아가기"
+                android:textColor="#ffffff"/>
 
         </LinearLayout>
     </LinearLayout>

@@ -2,15 +2,17 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.exam.administrator.nccc_trip.TouristActivity"
+    tools:context="com.exam.administrator.nccc_trip.DetailActivity"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,62 +30,70 @@
                 android:layout_height="50dp"
                 android:orientation="horizontal">
 
-                <FrameLayout
+                <TextView
+                    android:id="@+id/detail_start_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="3">
+                    android:gravity="center"
+                    android:text="2017/1/1"
+                    android:layout_weight="3"/>
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <TextView
-                        android:id="@+id/detail_start_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="2017/1/1"
-                        android:gravity="center"/>
-                </FrameLayout>
-
-                <FrameLayout
+                <TextView
+                    android:id="@+id/detail_start_time"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="4">
+                    android:gravity="center"
+                    android:text="00:00"
+                    android:layout_weight="4"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text=" ~ "/>
-                </FrameLayout>
-
-                <FrameLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="3">
+                    android:gravity="center"
+                    android:text=" ~ "
+                    android:layout_weight="4.3"/>
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/detail_end_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="00:00"
+                    android:layout_weight="4"/>
 
-                    <TextView
-                        android:id="@+id/detail_end_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="2017/7/13"
-                        android:gravity="center"/>
-                </FrameLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="4">
+                    android:layout_weight="4"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
 
                     <ImageView
                         android:id="@+id/detail_add_calendar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/calendar_icon"/>
+                        android:src="@drawable/plus_button"
+                        android:cropToPadding="true"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
+
+                    <ImageView
+                        android:id="@+id/detail_delete_calendar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/delete_button"
+                        android:cropToPadding="true" />
                 </FrameLayout>
 
             </LinearLayout>
@@ -152,7 +162,7 @@
 
                             <FrameLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="5dp"/>
+                                android:layout_height="5dp" />
 
                             <TextView
                                 android:id="@+id/detail_address"
@@ -161,6 +171,15 @@
                                 android:text="주소" />
 
 
+                            <TextView
+                                android:id="@+id/detail_tel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:autoLink="phone"
+                                android:textStyle="bold"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"/>
                             <FrameLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
@@ -214,10 +233,10 @@
                                             android:textSize="13dp" />
 
                                         <TextView
+                                            android:id="@+id/detail_homepage"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginTop="8dp"
-                                            android:id="@+id/detail_homepage"/>
+                                            android:layout_marginTop="8dp" />
 
                                     </LinearLayout>
                                 </FrameLayout>
@@ -240,24 +259,31 @@
                                     android:text="더보기" />
                             </FrameLayout>
                         </LinearLayout>
-
-
                     </LinearLayout>
                 </FrameLayout>
-
             </FrameLayout>
 
-            <RelativeLayout
-
-                android:id="@+id/map_view"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp">
+                android:layout_height="match_parent">
 
+                <ImageView
+                    android:layout_width="65dp"
+                    android:layout_height="56dp"
+                    android:src="@drawable/keyword_little"
+                    android:layout_gravity="center"/>
 
-            </RelativeLayout>
-
+                <TextView
+                    android:id="@+id/detail_map_more"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:gravity="center"
+                    android:text="지도보기"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
 
         </LinearLayout>
+
 
     </ScrollView>
 </FrameLayout>
